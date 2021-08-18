@@ -14,6 +14,8 @@ repositories {
 
 dependencies {
     implementation(kotlin("stdlib"))
+    implementation(kotlin("test"))
+    implementation(kotlin("test-junit"))
 }
 
 pluginBundle {
