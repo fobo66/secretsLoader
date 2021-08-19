@@ -9,13 +9,15 @@ group = "dev.fobo66.secretsloader"
 version = "1.0-SNAPSHOT"
 
 repositories {
+    google()
     mavenCentral()
 }
 
 dependencies {
     implementation(kotlin("stdlib"))
-    implementation(kotlin("test"))
-    implementation(kotlin("test-junit"))
+    implementation("com.android.tools.build:gradle:7.0.0")
+    testImplementation(kotlin("test"))
+    testImplementation(kotlin("test-junit"))
 }
 
 pluginBundle {
