@@ -1,5 +1,6 @@
 plugins {
     `java-gradle-plugin`
+    `kotlin-dsl`
 
     kotlin("jvm") version "1.5.21"
     id("com.gradle.plugin-publish") version "0.12.0"
@@ -27,7 +28,7 @@ pluginBundle {
 }
 
 gradlePlugin {
-    val secretsLoader by plugins.creating {
+    plugins.register("secretsLoader") {
         id = "dev.fobo66.secretsloader"
         displayName = "SecretsLoader – load secrets from the"
         description =
