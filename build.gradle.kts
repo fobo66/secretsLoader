@@ -3,6 +3,7 @@ plugins {
     `kotlin-dsl`
 
     kotlin("jvm") version "1.5.21"
+    kotlin("plugin.serialization") version "1.5.21"
     id("com.gradle.plugin-publish") version "0.15.0"
 }
 
@@ -15,8 +16,8 @@ repositories {
 }
 
 dependencies {
-    implementation(kotlin("stdlib"))
     implementation("com.android.tools.build:gradle:7.0.0")
+    implementation("com.charleskorn.kaml:kaml:0.35.2")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
     testImplementation("io.mockk:mockk:1.12.0")
