@@ -19,6 +19,7 @@ dependencies {
     implementation("com.android.tools.build:gradle:7.0.0")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
+    testImplementation("io.mockk:mockk:1.12.0")
 }
 
 pluginBundle {

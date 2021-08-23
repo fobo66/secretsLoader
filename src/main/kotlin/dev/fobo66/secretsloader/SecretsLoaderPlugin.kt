@@ -14,11 +14,12 @@ class SecretsLoaderPlugin : Plugin<Project> {
                 encryptionAlgorithm.set(secretsParams.encryptionAlgorithm)
                 encryptionMessageDigestAlgorithm.set(secretsParams.encryptionMessageDigestAlgorithm)
                 encryptionPassword.set(secretsParams.encryptionPassword)
+                encryptionSuffix.set(secretsParams.encryptionSuffix)
                 secretInputs.set(secretsParams.secretsFolder)
                 secretOutputs.set(target.layout.buildDirectory.dir("secrets"))
             }
 
-            target.tasks.findByName("assemble${it.name}")?.dependsOn(loadSecretsTask)
+            target.tasks.findByName("pre${it.name}Build")?.dependsOn(loadSecretsTask)
         }
     }
 }
