@@ -13,6 +13,7 @@ import org.gradle.work.FileChange
 import org.gradle.work.InputChanges
 import kotlin.test.BeforeTest
 import kotlin.test.Test
+import kotlin.test.assertFails
 import kotlin.test.assertTrue
 
 class LoadSecretsTaskTest {
@@ -37,13 +38,13 @@ class LoadSecretsTaskTest {
         val secretsFile = project.layout.projectDirectory.dir("secrets")
             .file(SECRET_FILE).asFile
         val testSecretsBytes =
-            this.javaClass.classLoader.getResourceAsStream("secrets.properties.cipher")!!.readAllBytes()
+            this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
         secretsFile.writeBytes(testSecretsBytes)
         every { fileChange.file } returns secretsFile
     }
 
     @Test
-    fun loadSecrets() {
+    fun `load secrets`() {
         val secretsTask = project.tasks.register<LoadSecretsTask>("loadSecrets") {
             encryptionPassword.set("password")
             encryptionToolExecutable.set("openssl")
@@ -58,6 +59,23 @@ class LoadSecretsTaskTest {
 
         assertTrue {
             project.layout.buildDirectory.file("secrets/secret.properties").isPresent
+        }
+    }
+
+    @Test
+    fun `failed to load secrets into non-existent directory`() {
+        val secretsTask = project.tasks.register<LoadSecretsTask>("loadSecrets") {
+            encryptionPassword.set("password")
+            encryptionToolExecutable.set("openssl")
+            encryptionAlgorithm.set("aes-256-cbc")
+            encryptionSuffix.set(".cipher")
+            encryptionMessageDigestAlgorithm.set("md5")
+            secretInputs.set(project.layout.projectDirectory.dir("secrets"))
+            secretOutputs.set(project.layout.buildDirectory.dir("nosecrets"))
+        }
+
+        assertFails {
+            secretsTask.get().loadSecrets(inputChanges)
         }
     }
 
