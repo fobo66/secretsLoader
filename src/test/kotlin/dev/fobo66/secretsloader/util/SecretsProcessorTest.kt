@@ -29,7 +29,7 @@ class SecretsProcessorTest {
 
     @Test
     fun loadResConfigValues() {
-        val resConfigSecrets = SecretsProcessor().loadResConfigValues(resConfigSecretsFile)
+        val resConfigSecrets = SecretsProcessor().loadResourceValues(resConfigSecretsFile)
 
         assertTrue {
             resConfigSecrets.containsKey("SECRET_KEY")

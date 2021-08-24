@@ -13,7 +13,7 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
-abstract class AddResConfigValuesTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
+abstract class AddResourceValuesTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
 
     @get:Input
     abstract val flavorName: Property<String>
@@ -28,12 +28,12 @@ abstract class AddResConfigValuesTask @Inject constructor(objectFactory: ObjectF
         project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { androidComponents ->
             val variantSelector = androidComponents.selector().withName(flavorName.get())
             androidComponents.onVariants(variantSelector) { variant ->
-                val resConfigSecrets =
-                    secretsProcessor.loadResConfigValues(resConfigFile.asFile.get().inputStream())
+                val resourceSecrets =
+                    secretsProcessor.loadResourceValues(resConfigFile.asFile.get().inputStream())
                         .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
                         .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
 
-                variant.resValues.putAll(resConfigSecrets)
+                variant.resValues.putAll(resourceSecrets)
             }
         }
     }

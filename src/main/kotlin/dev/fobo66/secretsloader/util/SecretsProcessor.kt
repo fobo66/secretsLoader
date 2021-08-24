@@ -20,7 +20,7 @@ class SecretsProcessor {
         }
     }
 
-    fun loadResConfigValues(inputStream: InputStream): Map<String, Secret> {
+    fun loadResourceValues(inputStream: InputStream): Map<String, Secret> {
         val secrets = Yaml.default.decodeFromStream(
             Secrets.serializer(),
             inputStream
