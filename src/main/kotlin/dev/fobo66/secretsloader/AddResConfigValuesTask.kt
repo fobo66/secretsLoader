@@ -29,7 +29,7 @@ abstract class AddResConfigValuesTask @Inject constructor(objectFactory: ObjectF
             val variantSelector = androidComponents.selector().withName(flavorName.get())
             androidComponents.onVariants(variantSelector) { variant ->
                 val resConfigSecrets =
-                    secretsProcessor.loadBuildConfigValues(resConfigFile.asFile.get().inputStream())
+                    secretsProcessor.loadResConfigValues(resConfigFile.asFile.get().inputStream())
                         .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
                         .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
 
