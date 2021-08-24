@@ -1,0 +1,8 @@
+secrets:
+  SECRET_KEY:
+      type: String
+      value: test
+      comment: test
+  SECOND_SECRET:
+      type: String
+      value: test2
