@@ -4,7 +4,7 @@ import com.android.build.api.variant.BuildConfigField
 import com.charleskorn.kaml.Yaml
 import dev.fobo66.secretsloader.entities.Secret
 import dev.fobo66.secretsloader.entities.Secrets
-import java.io.File
+import dev.fobo66.secretsloader.entities.SigningConfigSecret
 import java.io.InputStream
 
 class SecretsProcessor {
@@ -27,5 +27,12 @@ class SecretsProcessor {
         )
 
         return secrets.secrets
+    }
+
+    fun loadSigningConfig(inputStream: InputStream): SigningConfigSecret {
+        return Yaml.default.decodeFromStream(
+            SigningConfigSecret.serializer(),
+            inputStream
+        )
     }
 }

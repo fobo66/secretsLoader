@@ -1,25 +1,14 @@
 package dev.fobo66.secretsloader.util
 
-import org.junit.Before
-import java.io.InputStream
 import kotlin.test.Test
+import kotlin.test.assertEquals
 import kotlin.test.assertTrue
 
 class SecretsProcessorTest {
 
-    private lateinit var buildConfigSecretsFile: InputStream
-    private lateinit var resConfigSecretsFile: InputStream
-
-
-    @Before
-    fun setUp() {
-        buildConfigSecretsFile = javaClass.classLoader.getResourceAsStream("buildConfigValues.yml")!!
-        resConfigSecretsFile = javaClass.classLoader.getResourceAsStream("resConfigValues.yml")!!
-
-    }
-
     @Test
     fun loadBuildConfigValues() {
+        val buildConfigSecretsFile = javaClass.classLoader.getResourceAsStream("buildConfigValues.yml")!!
         val buildConfigSecrets = SecretsProcessor().loadBuildConfigValues(buildConfigSecretsFile)
 
         assertTrue {
@@ -29,10 +18,19 @@ class SecretsProcessorTest {
 
     @Test
     fun loadResConfigValues() {
+        val resConfigSecretsFile = javaClass.classLoader.getResourceAsStream("resConfigValues.yml")!!
         val resConfigSecrets = SecretsProcessor().loadResourceValues(resConfigSecretsFile)
 
         assertTrue {
             resConfigSecrets.containsKey("SECRET_KEY")
         }
+    }
+
+    @Test
+    fun loadSigningConfig() {
+        val signingConfigSecretsFile = javaClass.classLoader.getResourceAsStream("signingConfig.yml")!!
+        val resConfigSecrets = SecretsProcessor().loadSigningConfig(signingConfigSecretsFile)
+
+        assertEquals("test", resConfigSecrets.keyPassword)
     }
 }
