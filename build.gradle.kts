@@ -39,6 +39,18 @@ gradlePlugin {
     }
 }
 
+tasks.compileKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
+tasks.compileTestKotlin {
+    kotlinOptions {
+        jvmTarget = "11"
+    }
+}
+
 val functionalTestSourceSet = sourceSets.create("functionalTest") {
 }
 
