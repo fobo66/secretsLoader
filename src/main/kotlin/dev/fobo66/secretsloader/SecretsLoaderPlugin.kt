@@ -9,8 +9,8 @@ class SecretsLoaderPlugin : Plugin<Project> {
     override fun apply(target: Project) {
         val secretsParams = target.extensions.create("secretsLoader", SecretsLoaderExtension::class.java)
 
-        target.extensions.findByType(AndroidComponentsExtension::class.java)?.beforeVariants {
-            val loadSecretsTask = target.tasks.register("load${it.name}Secrets", LoadSecretsTask::class) {
+        target.extensions.findByType(AndroidComponentsExtension::class.java)?.beforeVariants { variant ->
+            val loadSecretsTask = target.tasks.register("load${variant.name}Secrets", LoadSecretsTask::class) {
                 encryptionAlgorithm.set(secretsParams.encryptionAlgorithm)
                 encryptionMessageDigestAlgorithm.set(secretsParams.encryptionMessageDigestAlgorithm)
                 encryptionPassword.set(secretsParams.encryptionPassword)
@@ -19,7 +19,14 @@ class SecretsLoaderPlugin : Plugin<Project> {
                 secretOutputs.set(target.layout.buildDirectory.dir("secrets"))
             }
 
-            target.tasks.findByName("pre${it.name}Build")?.dependsOn(loadSecretsTask)
+            val addBuildConfigValuesTask =
+                target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
+                    buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file(variant.name))
+                    flavorName.set(variant.name)
+                    dependsOn(loadSecretsTask)
+                }
+
+            target.tasks.findByName("pre${variant.name}Build")?.dependsOn(loadSecretsTask)
         }
     }
 }
