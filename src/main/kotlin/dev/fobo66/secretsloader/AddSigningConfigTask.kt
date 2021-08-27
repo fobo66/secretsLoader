@@ -15,7 +15,7 @@ import javax.inject.Inject
 abstract class AddSigningConfigTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
 
     @get:Input
-    abstract val flavor: Property<Pair<String, String>>
+    abstract val buildType: Property<String>
 
     @get:InputFile
     abstract val keystoreFile: RegularFileProperty
@@ -29,13 +29,13 @@ abstract class AddSigningConfigTask @Inject constructor(objectFactory: ObjectFac
     fun addSigningConfig() {
         project.extensions.findByType(ApplicationExtension::class.java)?.let { android ->
             val signingSecrets = secretsProcessor.loadSigningConfig(signingConfigFile.asFile.get().inputStream())
-            val signingConfig = android.signingConfigs.maybeCreate(flavor.get().second).apply {
+            val signingConfig = android.signingConfigs.maybeCreate(buildType.get()).apply {
                 keyAlias = signingSecrets.keyAlias
                 keyPassword = signingSecrets.keyPassword
                 storeFile = keystoreFile.asFile.get()
                 storePassword = signingSecrets.storePassword
             }
-            android.productFlavors.findByName(flavor.get().second)?.signingConfig = signingConfig
+            android.buildTypes.findByName(buildType.get())?.signingConfig = signingConfig
         }
     }
 }
