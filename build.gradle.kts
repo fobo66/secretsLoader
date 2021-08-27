@@ -16,7 +16,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.0.0")
+    implementation("com.android.tools.build:gradle:7.0.1")
     implementation("com.charleskorn.kaml:kaml:0.35.2")
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
