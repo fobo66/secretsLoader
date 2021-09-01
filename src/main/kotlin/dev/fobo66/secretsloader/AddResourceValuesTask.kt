@@ -10,6 +10,7 @@ import org.gradle.api.provider.Property
 import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.InputFile
 import org.gradle.api.tasks.TaskAction
+import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
@@ -24,8 +25,8 @@ abstract class AddResourceValuesTask @Inject constructor(objectFactory: ObjectFa
     private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
 
     @TaskAction
-    fun addBuildConfigValues() {
-        project.extensions.findByType(AndroidComponentsExtension::class.java)?.let { androidComponents ->
+    fun addResourceValues() {
+        project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
             val variantSelector = androidComponents.selector().withName(flavorName.get())
             androidComponents.onVariants(variantSelector) { variant ->
                 val resourceSecrets =
