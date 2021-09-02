@@ -7,7 +7,7 @@ import dev.fobo66.secretsloader.entities.Secrets
 import dev.fobo66.secretsloader.entities.SigningConfigSecret
 import java.io.InputStream
 
-class SecretsProcessor {
+open class SecretsProcessor {
 
     fun loadBuildConfigValues(inputStream: InputStream): Map<String, BuildConfigField<String>> {
         val secrets = Yaml.default.decodeFromStream(

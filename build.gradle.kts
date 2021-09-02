@@ -1,3 +1,5 @@
+import org.gradle.configurationcache.extensions.serviceOf
+
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
@@ -21,6 +23,12 @@ dependencies {
     testImplementation(kotlin("test"))
     testImplementation(kotlin("test-junit"))
     testImplementation("io.mockk:mockk:1.12.0")
+    testRuntimeOnly(
+        files(
+            serviceOf<org.gradle.api.internal.classpath.ModuleRegistry>().getModule("gradle-tooling-api-builders")
+                .classpath.asFiles.first()
+        )
+    )
 }
 
 pluginBundle {
