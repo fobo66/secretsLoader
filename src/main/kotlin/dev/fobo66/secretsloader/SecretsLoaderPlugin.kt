@@ -21,7 +21,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
 
             val addBuildConfigValuesTask =
                 target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
-                    buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file(variant.name))
+                    buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file("${variant.name}.yml"))
                     flavorName.set(variant.name)
                     dependsOn(loadSecretsTask)
                 }
