@@ -19,12 +19,14 @@ class SecretsLoaderPlugin : Plugin<Project> {
                 secretOutputs.set(target.layout.buildDirectory.dir("secrets"))
             }
 
-            val addBuildConfigValuesTask =
-                target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
-                    buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file("${variant.name}.yml"))
-                    flavorName.set(variant.name)
-                    dependsOn(loadSecretsTask)
-                }
+            if (secretsParams.useBuildConfig.get()) {
+                val addBuildConfigValuesTask =
+                    target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
+                        buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file("${variant.name}BuildConfig.yml"))
+                        flavorName.set(variant.name)
+                        dependsOn(loadSecretsTask)
+                    }
+            }
 
             target.tasks.findByName("pre${variant.name}Build")?.dependsOn(loadSecretsTask)
         }
