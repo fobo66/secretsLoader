@@ -47,15 +47,25 @@ gradlePlugin {
 }
 
 tasks.compileKotlin {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
+
     kotlinOptions {
         jvmTarget = "11"
     }
 }
 
 tasks.compileTestKotlin {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
     kotlinOptions {
         jvmTarget = "11"
     }
+}
+
+tasks.compileJava {
+    sourceCompatibility = "11"
+    targetCompatibility = "11"
 }
 
 val functionalTestSourceSet = sourceSets.create("functionalTest") {
