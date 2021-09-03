@@ -33,6 +33,11 @@ abstract class SecretsLoaderExtension(val projectLayout: ProjectLayout) {
     abstract val useBuildConfig: Property<Boolean>
 
     /**
+     * Whether secrets will be added to the resources. Default value is false
+     */
+    abstract val useResourceValues: Property<Boolean>
+
+    /**
      * Suffix for the secrets file that will be removed after decryption. Used commonly to distinguish encrypted files
      */
     abstract val encryptionSuffix: Property<String>
@@ -48,6 +53,7 @@ abstract class SecretsLoaderExtension(val projectLayout: ProjectLayout) {
         encryptionMessageDigestAlgorithm.convention("md5")
         encryptionSuffix.convention(".cipher")
         useBuildConfig.convention(true)
+        useResourceValues.convention(false)
         secretsFolder.convention(projectLayout.buildDirectory.dir(SECRETS_DIR_NAME))
     }
 }

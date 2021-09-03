@@ -41,6 +41,17 @@ class SecretsLoaderPlugin : Plugin<Project> {
                     }
             }
 
+            if (secretsParams.useResourceValues.get()) {
+                val addResourceValuesTask =
+                    target.tasks.register("add${variant.name}ResourceValues", AddResourceValuesTask::class) {
+                        resConfigFile.set(
+                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
+                        )
+                        flavorName.set(variant.name)
+                        dependsOn(loadSecretsTask)
+                    }
+            }
+
             target.tasks.findByName("pre${variant.name}Build")?.dependsOn(loadSecretsTask)
         }
     }
