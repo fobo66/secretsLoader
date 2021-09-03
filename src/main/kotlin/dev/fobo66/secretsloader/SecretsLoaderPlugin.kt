@@ -13,8 +13,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
     private val minGradleVersion = GradleVersion.version("7.0")
 
     override fun apply(target: Project) {
-        val gradleVersion = GradleVersion.version(target.gradle.gradleVersion)
-        check(gradleVersion >= minGradleVersion) {
+        check(GradleVersion.current() >= minGradleVersion) {
             "secretsLoader requires Gradle 7.0 or later."
         }
 
@@ -31,8 +30,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
             }
 
             if (secretsParams.useBuildConfig.get()) {
-                val addBuildConfigValuesTask =
-                    target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
+                target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
                         buildConfigFile.set(
                             target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}BuildConfig.yml")
                         )
@@ -42,8 +40,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
             }
 
             if (secretsParams.useResourceValues.get()) {
-                val addResourceValuesTask =
-                    target.tasks.register("add${variant.name}ResourceValues", AddResourceValuesTask::class) {
+                target.tasks.register("add${variant.name}ResourceValues", AddResourceValuesTask::class) {
                         resConfigFile.set(
                             target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
                         )
