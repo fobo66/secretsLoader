@@ -2,6 +2,7 @@ package dev.fobo66.secretsloader
 
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.AndroidComponentsExtension
+import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByName
@@ -17,9 +18,9 @@ class AddBuildConfigValuesTaskTest {
     @BeforeTest
     fun setUp() {
         project = ProjectBuilder.builder().build()
-        project.mkdir("secrets")
-        project.mkdir("build/secrets")
-        val secretsFile = project.layout.buildDirectory.dir("secrets").get()
+        project.mkdir(SECRETS_DIR_NAME)
+        project.mkdir("build/$SECRETS_DIR_NAME")
+        val secretsFile = project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
             .file(SECRET_FILE).asFile
         val testSecretsBytes =
             this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
@@ -43,7 +44,7 @@ class AddBuildConfigValuesTaskTest {
     fun addBuildConfigValues() {
         val addBuildConfigValuesTask =
             project.tasks.register<AddBuildConfigValuesTask>("addDebugBuildConfigValues") {
-                buildConfigFile.set(project.layout.buildDirectory.dir("secrets").get().file(SECRET_FILE))
+                buildConfigFile.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(SECRET_FILE))
                 flavorName.set("debug")
             }
 

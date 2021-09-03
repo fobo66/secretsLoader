@@ -1,5 +1,6 @@
 package dev.fobo66.secretsloader
 
+import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
 import io.mockk.every
 import io.mockk.mockk
 import org.gradle.api.Project
@@ -33,9 +34,9 @@ class LoadSecretsTaskTest {
     @BeforeTest
     fun setUp() {
         project = ProjectBuilder.builder().build()
-        project.mkdir("secrets")
-        project.mkdir("build/secrets")
-        val secretsFile = project.layout.projectDirectory.dir("secrets")
+        project.mkdir(SECRETS_DIR_NAME)
+        project.mkdir("build/$SECRETS_DIR_NAME")
+        val secretsFile = project.layout.projectDirectory.dir(SECRETS_DIR_NAME)
             .file(SECRET_FILE).asFile
         val testSecretsBytes =
             this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
@@ -51,8 +52,8 @@ class LoadSecretsTaskTest {
             encryptionAlgorithm.set("aes-256-cbc")
             encryptionSuffix.set(".cipher")
             encryptionMessageDigestAlgorithm.set("md5")
-            secretInputs.set(project.layout.projectDirectory.dir("secrets"))
-            secretOutputs.set(project.layout.buildDirectory.dir("secrets"))
+            secretInputs.set(project.layout.projectDirectory.dir(SECRETS_DIR_NAME))
+            secretOutputs.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME))
         }
 
         secretsTask.get().loadSecrets(inputChanges)
@@ -70,7 +71,7 @@ class LoadSecretsTaskTest {
             encryptionAlgorithm.set("aes-256-cbc")
             encryptionSuffix.set(".cipher")
             encryptionMessageDigestAlgorithm.set("md5")
-            secretInputs.set(project.layout.projectDirectory.dir("secrets"))
+            secretInputs.set(project.layout.projectDirectory.dir(SECRETS_DIR_NAME))
             secretOutputs.set(project.layout.buildDirectory.dir("nosecrets"))
         }
 
