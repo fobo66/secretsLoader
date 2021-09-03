@@ -18,7 +18,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
             "secretsLoader requires Gradle 7.0 or later."
         }
 
-        val secretsParams = target.extensions.create("secretsLoader", SecretsLoaderExtension::class)
+        val secretsParams = target.extensions.create("secretsLoader", SecretsLoaderExtension::class, target.layout)
 
         target.extensions.findByType(AndroidComponentsExtension::class)?.beforeVariants { variant ->
             val loadSecretsTask = target.tasks.register("load${variant.name}Secrets", LoadSecretsTask::class) {

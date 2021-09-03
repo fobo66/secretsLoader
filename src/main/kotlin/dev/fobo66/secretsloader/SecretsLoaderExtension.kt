@@ -1,9 +1,11 @@
 package dev.fobo66.secretsloader
 
+import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
 import org.gradle.api.file.DirectoryProperty
+import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 
-abstract class SecretsLoaderExtension {
+abstract class SecretsLoaderExtension(val projectLayout: ProjectLayout) {
 
     /**
      * Executable for the encryption tool to encrypt or decrypt secrets file
@@ -36,7 +38,7 @@ abstract class SecretsLoaderExtension {
     abstract val encryptionSuffix: Property<String>
 
     /**
-     * Suffix for the secrets file that will be removed after decryption. Used commonly to distinguish encrypted files
+     * Folder to store secrets
      */
     abstract val secretsFolder: DirectoryProperty
 
@@ -46,5 +48,6 @@ abstract class SecretsLoaderExtension {
         encryptionMessageDigestAlgorithm.convention("md5")
         encryptionSuffix.convention(".cipher")
         useBuildConfig.convention(true)
+        secretsFolder.convention(projectLayout.buildDirectory.dir(SECRETS_DIR_NAME))
     }
 }
