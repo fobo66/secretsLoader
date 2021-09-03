@@ -80,6 +80,23 @@ class LoadSecretsTaskTest {
         }
     }
 
+    @Test
+    fun `failed to load secrets because of the wrong password`() {
+        val secretsTask = project.tasks.register<LoadSecretsTask>("loadSecrets") {
+            encryptionPassword.set("wrong")
+            encryptionToolExecutable.set("openssl")
+            encryptionAlgorithm.set("aes-256-cbc")
+            encryptionSuffix.set(".cipher")
+            encryptionMessageDigestAlgorithm.set("md5")
+            secretInputs.set(project.layout.projectDirectory.dir(SECRETS_DIR_NAME))
+            secretOutputs.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME))
+        }
+
+        assertFails {
+            secretsTask.get().loadSecrets(inputChanges)
+        }
+    }
+
     companion object {
         private const val SECRET_FILE = "secret.properties.cipher"
     }
