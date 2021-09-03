@@ -1,3 +1,5 @@
+import org.gradle.configurationcache.extensions.serviceOf
+
 plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
@@ -18,9 +20,14 @@ repositories {
 dependencies {
     implementation("com.android.tools.build:gradle:7.0.1")
     implementation("com.charleskorn.kaml:kaml:0.35.2")
-    testImplementation(kotlin("test"))
-    testImplementation(kotlin("test-junit"))
+    testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.12.0")
+    testRuntimeOnly(
+        files(
+            serviceOf<org.gradle.api.internal.classpath.ModuleRegistry>().getModule("gradle-tooling-api-builders")
+                .classpath.asFiles.first()
+        )
+    )
 }
 
 pluginBundle {
@@ -52,6 +59,10 @@ tasks.compileTestKotlin {
 }
 
 val functionalTestSourceSet = sourceSets.create("functionalTest") {
+}
+
+tasks.withType<Test>().configureEach {
+    useJUnitPlatform()
 }
 
 gradlePlugin.testSourceSets(functionalTestSourceSet)

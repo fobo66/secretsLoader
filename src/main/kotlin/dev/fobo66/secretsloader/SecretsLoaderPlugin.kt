@@ -4,9 +4,17 @@ import com.android.build.api.variant.AndroidComponentsExtension
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.kotlin.dsl.register
+import org.gradle.util.GradleVersion
 
 class SecretsLoaderPlugin : Plugin<Project> {
+    private val minGradleVersion = GradleVersion.version("7.0")
+
     override fun apply(target: Project) {
+        val gradleVersion = GradleVersion.version(target.gradle.gradleVersion)
+        check(gradleVersion >= minGradleVersion) {
+            "secretsLoader requires Gradle 7.0 or later."
+        }
+
         val secretsParams = target.extensions.create("secretsLoader", SecretsLoaderExtension::class.java)
 
         target.extensions.findByType(AndroidComponentsExtension::class.java)?.beforeVariants { variant ->
@@ -19,12 +27,16 @@ class SecretsLoaderPlugin : Plugin<Project> {
                 secretOutputs.set(target.layout.buildDirectory.dir("secrets"))
             }
 
-            val addBuildConfigValuesTask =
-                target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
-                    buildConfigFile.set(target.layout.buildDirectory.dir("secrets").get().file(variant.name))
-                    flavorName.set(variant.name)
-                    dependsOn(loadSecretsTask)
-                }
+            if (secretsParams.useBuildConfig.get()) {
+                val addBuildConfigValuesTask =
+                    target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
+                        buildConfigFile.set(
+                            target.layout.buildDirectory.dir("secrets").get().file("${variant.name}BuildConfig.yml")
+                        )
+                        flavorName.set(variant.name)
+                        dependsOn(loadSecretsTask)
+                    }
+            }
 
             target.tasks.findByName("pre${variant.name}Build")?.dependsOn(loadSecretsTask)
         }

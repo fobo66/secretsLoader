@@ -26,6 +26,11 @@ abstract class SecretsLoaderExtension {
     abstract val encryptionMessageDigestAlgorithm: Property<String>
 
     /**
+     * Whether secrets will be added to the BuildConfig. Default value is true
+     */
+    abstract val useBuildConfig: Property<Boolean>
+
+    /**
      * Suffix for the secrets file that will be removed after decryption. Used commonly to distinguish encrypted files
      */
     abstract val encryptionSuffix: Property<String>
@@ -40,5 +45,6 @@ abstract class SecretsLoaderExtension {
         encryptionAlgorithm.convention("aes-256-cdc")
         encryptionMessageDigestAlgorithm.convention("md5")
         encryptionSuffix.convention(".cipher")
+        useBuildConfig.convention(true)
     }
 }
