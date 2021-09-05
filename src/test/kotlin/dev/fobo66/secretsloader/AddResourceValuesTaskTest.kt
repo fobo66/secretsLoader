@@ -1,5 +1,6 @@
 package dev.fobo66.secretsloader
 
+
 import com.android.build.api.dsl.ApplicationExtension
 import com.android.build.api.variant.AndroidComponentsExtension
 import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
@@ -8,9 +9,11 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.gradle.testfixtures.ProjectBuilder
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
-class AddBuildConfigValuesTaskTest {
+class AddResourceValuesTaskTest {
 
     private lateinit var project: Project
 
@@ -40,14 +43,16 @@ class AddBuildConfigValuesTaskTest {
     }
 
     @Test
-    fun addBuildConfigValues() {
-        val addBuildConfigValuesTask =
-            project.tasks.register<AddBuildConfigValuesTask>("addDebugBuildConfigValues") {
-                buildConfigFile.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(SECRET_FILE))
+    fun addResourceValues() {
+        val addResourceValuesTask =
+            project.tasks.register<AddResourceValuesTask>("addDebugBuildConfigValues") {
+                resConfigFile.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(
+                    SECRET_FILE
+                ))
                 flavorName.set("debug")
             }
 
-        addBuildConfigValuesTask.get().addBuildConfigValues()
+        addResourceValuesTask.get().addResourceValues()
 
 
         project.extensions.findByType(AndroidComponentsExtension::class)!!.let { androidComponents ->
@@ -55,13 +60,13 @@ class AddBuildConfigValuesTaskTest {
             androidComponents.onVariants(variantSelector) {
                 // this assertion doesn't work, but let's pretend that it does
                 assertTrue {
-                    it.buildConfigFields.keySet().get().contains("SECRET_KEY")
+                    it.resValues.keySet().get().contains(it.makeResValueKey("string", "SECRET_KEY"))
                 }
             }
         }
     }
 
     companion object {
-        private const val SECRET_FILE = "buildConfigValues.yml"
+        private const val SECRET_FILE = "resConfigValues.yml"
     }
 }
