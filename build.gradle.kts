@@ -1,4 +1,5 @@
 import org.gradle.configurationcache.extensions.serviceOf
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-gradle-plugin`
@@ -15,6 +16,12 @@ version = "1.0-SNAPSHOT"
 repositories {
     google()
     mavenCentral()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(11))
+    }
 }
 
 dependencies {
@@ -46,32 +53,16 @@ gradlePlugin {
     }
 }
 
-tasks.compileKotlin {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
-
+tasks.withType<KotlinCompile> {
     kotlinOptions {
         jvmTarget = "11"
     }
-}
-
-tasks.compileTestKotlin {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
-    kotlinOptions {
-        jvmTarget = "11"
-    }
-}
-
-tasks.compileJava {
-    sourceCompatibility = "11"
-    targetCompatibility = "11"
 }
 
 val functionalTestSourceSet = sourceSets.create("functionalTest") {
 }
 
-tasks.withType<Test>().configureEach {
+tasks.withType<Test> {
     useJUnitPlatform()
 }
 
