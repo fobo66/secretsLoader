@@ -5,7 +5,7 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.ProjectLayout
 import org.gradle.api.provider.Property
 
-abstract class SecretsLoaderExtension(val projectLayout: ProjectLayout) {
+abstract class SecretsLoaderExtension(projectLayout: ProjectLayout) {
 
     /**
      * Executable for the encryption tool to encrypt or decrypt secrets file
