@@ -5,9 +5,13 @@ import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileType
 import org.gradle.api.provider.Property
 import org.gradle.api.tasks.*
+import org.gradle.process.ExecOperations
 import org.gradle.work.ChangeType
+import org.gradle.work.FileChange
 import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
+import java.io.File
+import javax.inject.Inject
 
 abstract class LoadSecretsTask : DefaultTask() {
 
@@ -49,6 +53,9 @@ abstract class LoadSecretsTask : DefaultTask() {
     @get:Input
     abstract val encryptionSuffix: Property<String>
 
+    @get:Inject
+    abstract val execOperations: ExecOperations
+
     @TaskAction
     fun loadSecrets(inputChanges: InputChanges) {
         if (inputChanges.isIncremental) {
@@ -66,22 +73,26 @@ abstract class LoadSecretsTask : DefaultTask() {
             if (change.changeType == ChangeType.REMOVED) {
                 targetFile.delete()
             } else {
-                project.exec {
-                    commandLine(
-                        encryptionToolExecutable.get(),
-                        encryptionAlgorithm.get(),
-                        "-md",
-                        encryptionMessageDigestAlgorithm.get(),
-                        "-d",
-                        "-out",
-                        targetFile.path,
-                        "-in",
-                        change.file.path,
-                        "-k",
-                        encryptionPassword.get()
-                    )
-                }
+                decrypt(targetFile, change)
             }
+        }
+    }
+
+    private fun decrypt(targetFile: File, change: FileChange) {
+        execOperations.exec {
+            commandLine(
+                encryptionToolExecutable.get(),
+                encryptionAlgorithm.get(),
+                "-md",
+                encryptionMessageDigestAlgorithm.get(),
+                "-d",
+                "-out",
+                targetFile.path,
+                "-in",
+                change.file.path,
+                "-k",
+                encryptionPassword.get()
+            )
         }
     }
 }
