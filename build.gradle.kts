@@ -25,7 +25,7 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.0.1")
+    compileOnly("com.android.tools.build:gradle:7.0.2")
     implementation("com.charleskorn.kaml:kaml:0.35.2")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.12.0")
