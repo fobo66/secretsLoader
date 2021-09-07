@@ -50,7 +50,7 @@ abstract class SecretsLoaderExtension(val projectLayout: ProjectLayout) {
     init {
         encryptionToolExecutable.convention("openssl")
         encryptionAlgorithm.convention("aes-256-cdc")
-        encryptionMessageDigestAlgorithm.convention("md5")
+        encryptionMessageDigestAlgorithm.convention("sha256")
         encryptionSuffix.convention(".cipher")
         useBuildConfig.convention(true)
         useResourceValues.convention(false)
