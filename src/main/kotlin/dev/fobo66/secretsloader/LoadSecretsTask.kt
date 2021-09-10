@@ -60,6 +60,8 @@ abstract class LoadSecretsTask : DefaultTask() {
     fun loadSecrets(inputChanges: InputChanges) {
         if (inputChanges.isIncremental) {
             logger.debug("Incrementally loading secrets")
+        } else {
+            logger.debug("Loading secrets not incrementally")
         }
 
         inputChanges.getFileChanges(secretInputs).forEach { change ->
@@ -71,8 +73,10 @@ abstract class LoadSecretsTask : DefaultTask() {
             ).get().asFile
 
             if (change.changeType == ChangeType.REMOVED) {
+                logger.debug("Deleting ${targetFile.name}")
                 targetFile.delete()
             } else {
+                logger.debug("Decrypting ${targetFile.name}")
                 decrypt(targetFile, change)
             }
         }
