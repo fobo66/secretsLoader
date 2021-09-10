@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package dev.fobo66.secretsloader
 
 import org.gradle.api.DefaultTask

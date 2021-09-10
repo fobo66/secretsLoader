@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package dev.fobo66.secretsloader
 
 import com.android.build.api.dsl.ApplicationExtension

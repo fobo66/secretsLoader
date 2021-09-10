@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 package dev.fobo66.secretsloader
 
 import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
