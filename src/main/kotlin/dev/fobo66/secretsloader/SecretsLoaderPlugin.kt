@@ -31,22 +31,44 @@ class SecretsLoaderPlugin : Plugin<Project> {
 
             if (secretsParams.useBuildConfig.get()) {
                 target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
-                        buildConfigFile.set(
-                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}BuildConfig.yml")
-                        )
-                        flavorName.set(variant.name)
-                        dependsOn(loadSecretsTask)
-                    }
+                    buildConfigFile.set(
+                        target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}BuildConfig.yml")
+                    )
+                    flavorName.set(variant.name)
+                    dependsOn(loadSecretsTask)
+                }
             }
 
             if (secretsParams.useResourceValues.get()) {
-                target.tasks.register("add${variant.name}ResourceValues", AddResourceValuesTask::class) {
-                        resConfigFile.set(
-                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
+                target.tasks.register("add${variant.name.capitalize()}ResourceValues", AddResourceValuesTask::class) {
+                    resConfigFile.set(
+                        target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
+                    )
+                    flavorName.set(variant.name)
+                    dependsOn(loadSecretsTask)
+                }
+            }
+
+            if (secretsParams.useSigningConfig.get()) {
+                val signingConfigTaskName = "add${variant.buildType?.capitalize()}SigningConfig"
+
+                if (target.tasks.findByName(signingConfigTaskName) == null) {
+                    target.tasks.register(
+                        signingConfigTaskName,
+                        AddSigningConfigTask::class
+                    ) {
+                        signingConfigFile.set(
+                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
+                                .file("${variant.buildType}.yml")
                         )
-                        flavorName.set(variant.name)
+                        keystoreFile.set(
+                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
+                                .file("${variant.buildType}.${secretsParams.keyStoreFileExtension}")
+                        )
+                        buildType.set(variant.buildType)
                         dependsOn(loadSecretsTask)
                     }
+                }
             }
 
             target.tasks.findByName("pre${variant.name.capitalize()}Build")?.dependsOn(loadSecretsTask)
