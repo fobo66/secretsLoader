@@ -3,6 +3,7 @@ package dev.fobo66.secretsloader
 import com.android.build.api.dsl.ApplicationExtension
 import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
 import org.gradle.api.Project
+import org.gradle.kotlin.dsl.get
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.gradle.testfixtures.ProjectBuilder
@@ -34,7 +35,7 @@ internal class AddSigningConfigTaskTest {
             }
 
             it.buildTypes {
-                getByName("debug") {}
+                create(BUILD_TYPE) {}
             }
         }
     }
@@ -57,11 +58,12 @@ internal class AddSigningConfigTaskTest {
 
         project.extensions.getByName<ApplicationExtension>("android").let { android ->
             assertNotNull(android.signingConfigs.findByName(BUILD_TYPE))
+            assertNotNull(android.buildTypes[BUILD_TYPE].signingConfig)
         }
     }
 
     companion object {
         private const val SECRET_FILE = "signingConfig.yml"
-        private const val BUILD_TYPE = "test"
+        private const val BUILD_TYPE = "internal"
     }
 }
