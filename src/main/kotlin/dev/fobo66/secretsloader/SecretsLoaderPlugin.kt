@@ -49,7 +49,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
                     }
             }
 
-            target.tasks.findByName("pre${variant.name}Build")?.dependsOn(loadSecretsTask)
+            target.tasks.findByName("pre${variant.name.capitalize()}Build")?.dependsOn(loadSecretsTask)
         }
     }
 }
