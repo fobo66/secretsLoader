@@ -7,7 +7,7 @@ plugins {
 
     kotlin("jvm") version "1.6.21"
     kotlin("plugin.serialization") version "1.5.30"
-    id("com.gradle.plugin-publish") version "0.15.0"
+    id("com.gradle.plugin-publish") version "0.21.0"
 }
 
 group = "dev.fobo66.secretsloader"
