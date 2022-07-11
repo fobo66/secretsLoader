@@ -6,7 +6,7 @@ plugins {
     `kotlin-dsl`
 
     kotlin("jvm") version "1.7.10"
-    kotlin("plugin.serialization") version "1.7.0"
+    kotlin("plugin.serialization") version "1.7.10"
     id("com.gradle.plugin-publish") version "1.0.0"
 }
 
