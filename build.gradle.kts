@@ -5,8 +5,8 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
 
-    kotlin("jvm") version "1.7.20"
-    kotlin("plugin.serialization") version "1.7.20"
+    kotlin("jvm") version "1.7.21"
+    kotlin("plugin.serialization") version "1.7.21"
     id("com.gradle.plugin-publish") version "1.1.0"
 }
 
@@ -25,7 +25,7 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle:7.3.1")
+    implementation("com.android.tools.build:gradle-api:7.3.1")
     implementation("com.charleskorn.kaml:kaml:0.49.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.2")
