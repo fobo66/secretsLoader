@@ -36,12 +36,6 @@ dependencies {
     )
 }
 
-pluginBundle {
-    website = "https://github.com/fobo66/secretsLoader"
-    vcsUrl = "https://github.com/fobo66/secretsLoader.git"
-    tags = listOf("android", "secrets", "config", "credentials-management")
-}
-
 gradlePlugin {
     plugins.register("secretsLoader") {
         id = "dev.fobo66.secretsloader"
@@ -49,6 +43,9 @@ gradlePlugin {
         description =
             "A plugin that helps you with loading sensitive data like API keys from encrypted YAML files into variant-specific res values or build config fields"
         implementationClass = "dev.fobo66.secretsloader.SecretsLoaderPlugin"
+        website.set("https://github.com/fobo66/secretsLoader")
+        vcsUrl.set("https://github.com/fobo66/secretsLoader.git")
+        tags.set(listOf("android", "secrets", "config", "credentials-management"))
     }
 }
 
