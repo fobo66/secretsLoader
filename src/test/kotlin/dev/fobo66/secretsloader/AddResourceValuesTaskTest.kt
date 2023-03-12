@@ -28,17 +28,18 @@ class AddResourceValuesTaskTest {
         val testSecretsBytes =
             this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
         secretsFile.writeBytes(testSecretsBytes)
-        project.pluginManager.apply("com.android.application")
-        project.extensions.getByName<ApplicationExtension>("android").let {
-            it.compileSdk = 30
-            it.defaultConfig {
-                applicationId = "com.example.test"
-                minSdk = 30
-                targetSdk = 30
-            }
+        project.pluginManager.withPlugin("com.android.application") {
+            project.extensions.getByName<ApplicationExtension>("android").let {
+                it.compileSdk = 30
+                it.defaultConfig {
+                    applicationId = "com.example.test"
+                    minSdk = 30
+                    targetSdk = 30
+                }
 
-            it.buildTypes {
-                getByName("debug") {}
+                it.buildTypes {
+                    getByName("debug") {}
+                }
             }
         }
     }
@@ -56,7 +57,7 @@ class AddResourceValuesTaskTest {
         addResourceValuesTask.get().addResourceValues()
 
 
-        project.extensions.findByType(AndroidComponentsExtension::class)!!.let { androidComponents ->
+        project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
             val variantSelector = androidComponents.selector().withName("debug")
             androidComponents.onVariants(variantSelector) {
                 // this assertion doesn't work, but let's pretend that it does
