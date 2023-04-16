@@ -1,5 +1,4 @@
 import org.gradle.configurationcache.extensions.serviceOf
-import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     `java-gradle-plugin`
@@ -17,14 +16,12 @@ repositories {
     mavenCentral()
 }
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(11))
-    }
+kotlin {
+    jvmToolchain(17)
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:7.4.2")
+    implementation("com.android.tools.build:gradle-api:8.0.0")
     implementation("com.charleskorn.kaml:kaml:0.53.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.4")
@@ -46,12 +43,6 @@ gradlePlugin {
         website.set("https://github.com/fobo66/secretsLoader")
         vcsUrl.set("https://github.com/fobo66/secretsLoader.git")
         tags.set(listOf("android", "secrets", "config", "credentials-management"))
-    }
-}
-
-tasks.withType<KotlinCompile> {
-    kotlinOptions {
-        jvmTarget = "11"
     }
 }
 
