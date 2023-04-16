@@ -8,6 +8,7 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.util.GradleVersion
+import java.util.*
 
 class SecretsLoaderPlugin : Plugin<Project> {
     private val minGradleVersion = GradleVersion.version("7.0")
@@ -50,7 +51,13 @@ class SecretsLoaderPlugin : Plugin<Project> {
             }
 
             if (secretsParams.useSigningConfig.get()) {
-                val signingConfigTaskName = "add${variant.buildType?.capitalize()}SigningConfig"
+                val signingConfigTaskName = "add${
+                    variant.buildType?.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(
+                            Locale.getDefault()
+                        ) else it.toString()
+                    }
+                }SigningConfig"
 
                 if (target.tasks.findByName(signingConfigTaskName) == null) {
                     target.tasks.register(
@@ -71,7 +78,8 @@ class SecretsLoaderPlugin : Plugin<Project> {
                 }
             }
 
-            target.tasks.findByName("pre${variant.name.capitalize()}Build")?.dependsOn(loadSecretsTask)
+            target.tasks.findByName("pre${variant.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}Build")
+                ?.dependsOn(loadSecretsTask)
         }
     }
 }
