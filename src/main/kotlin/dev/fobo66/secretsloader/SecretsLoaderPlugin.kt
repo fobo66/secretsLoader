@@ -41,7 +41,11 @@ class SecretsLoaderPlugin : Plugin<Project> {
             }
 
             if (secretsParams.useResourceValues.get()) {
-                target.tasks.register("add${variant.name.capitalize()}ResourceValues", AddResourceValuesTask::class) {
+                target.tasks.register("add${
+                    variant.name.replaceFirstChar {
+                        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
+                    }
+                }ResourceValues", AddResourceValuesTask::class) {
                     resConfigFile.set(
                         target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
                     )
