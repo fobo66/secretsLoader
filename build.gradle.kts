@@ -21,7 +21,7 @@ kotlin {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.0.2")
+    implementation("com.android.tools.build:gradle-api:8.1.0")
     implementation("com.charleskorn.kaml:kaml:0.54.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.5")
@@ -36,7 +36,7 @@ dependencies {
 gradlePlugin {
     plugins.register("secretsLoader") {
         id = "dev.fobo66.secretsloader"
-        displayName = "SecretsLoader – load secrets from the"
+        displayName = "SecretsLoader – load secrets from the YAML file"
         description =
             "A plugin that helps you with loading sensitive data like API keys from encrypted YAML files into variant-specific res values or build config fields"
         implementationClass = "dev.fobo66.secretsloader.SecretsLoaderPlugin"
@@ -46,7 +46,7 @@ gradlePlugin {
     }
 }
 
-val functionalTestSourceSet = sourceSets.create("functionalTest") {
+val functionalTestSourceSet: SourceSet = sourceSets.create("functionalTest") {
 }
 
 tasks.withType<Test> {

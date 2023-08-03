@@ -10,6 +10,7 @@ import org.gradle.kotlin.dsl.register
 import org.gradle.util.GradleVersion
 import java.util.*
 
+@Suppress("unused")
 class SecretsLoaderPlugin : Plugin<Project> {
     private val minGradleVersion = GradleVersion.version("7.0")
 
@@ -51,34 +52,6 @@ class SecretsLoaderPlugin : Plugin<Project> {
                     )
                     flavorName.set(variant.name)
                     dependsOn(loadSecretsTask)
-                }
-            }
-
-            if (secretsParams.useSigningConfig.get()) {
-                val signingConfigTaskName = "add${
-                    variant.buildType?.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(
-                            Locale.getDefault()
-                        ) else it.toString()
-                    }
-                }SigningConfig"
-
-                if (target.tasks.findByName(signingConfigTaskName) == null) {
-                    target.tasks.register(
-                        signingConfigTaskName,
-                        AddSigningConfigTask::class
-                    ) {
-                        signingConfigFile.set(
-                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
-                                .file("${variant.buildType}.yml")
-                        )
-                        keystoreFile.set(
-                            target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
-                                .file("${variant.buildType}.${secretsParams.keyStoreFileExtension}")
-                        )
-                        buildType.set(variant.buildType)
-                        dependsOn(loadSecretsTask)
-                    }
                 }
             }
 
