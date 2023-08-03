@@ -22,7 +22,7 @@ kotlin {
 
 dependencies {
     implementation("com.android.tools.build:gradle-api:8.1.0")
-    implementation("com.charleskorn.kaml:kaml:0.54.0")
+    implementation("com.charleskorn.kaml:kaml:0.55.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.5")
     testRuntimeOnly(
