@@ -5,7 +5,7 @@ plugins {
     `kotlin-dsl`
 
     embeddedKotlin("plugin.serialization")
-    id("com.gradle.plugin-publish") version "1.2.0"
+    id("com.gradle.plugin-publish") version "1.2.1"
 }
 
 group = "dev.fobo66.secretsloader"
