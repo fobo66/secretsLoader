@@ -24,7 +24,7 @@ dependencies {
     implementation("com.android.tools.build:gradle-api:8.2.2")
     implementation("com.charleskorn.kaml:kaml:0.57.0")
     testImplementation(kotlin("test-junit5"))
-    testImplementation("io.mockk:mockk:1.13.9")
+    testImplementation("io.mockk:mockk:1.13.10")
     testRuntimeOnly(
         files(
             serviceOf<org.gradle.api.internal.classpath.ModuleRegistry>().getModule("gradle-tooling-api-builders")
