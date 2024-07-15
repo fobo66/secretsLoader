@@ -50,7 +50,7 @@ gradlePlugin {
 val functionalTestSourceSet: SourceSet = sourceSets.create("functionalTest") {
 }
 
-tasks.withType<Test> {
+tasks.test {
     useJUnitPlatform()
 }
 
