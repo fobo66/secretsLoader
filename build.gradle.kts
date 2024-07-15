@@ -1,4 +1,4 @@
-import org.gradle.configurationcache.extensions.serviceOf
+import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     `java-gradle-plugin`
@@ -17,7 +17,14 @@ repositories {
 }
 
 kotlin {
-    jvmToolchain(17)
+    compilerOptions {
+        jvmTarget = JvmTarget.JVM_17
+    }
+}
+
+java {
+    sourceCompatibility = JavaVersion.VERSION_17
+    targetCompatibility = JavaVersion.VERSION_17
 }
 
 dependencies {
@@ -25,12 +32,6 @@ dependencies {
     implementation("com.charleskorn.kaml:kaml:0.57.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.11")
-    testRuntimeOnly(
-        files(
-            serviceOf<org.gradle.api.internal.classpath.ModuleRegistry>().getModule("gradle-tooling-api-builders")
-                .classpath.asFiles.first()
-        )
-    )
 }
 
 gradlePlugin {
