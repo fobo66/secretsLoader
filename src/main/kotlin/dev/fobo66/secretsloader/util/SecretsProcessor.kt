@@ -2,6 +2,7 @@ package dev.fobo66.secretsloader.util
 
 import com.android.build.api.variant.BuildConfigField
 import com.charleskorn.kaml.Yaml
+import com.charleskorn.kaml.decodeFromStream
 import dev.fobo66.secretsloader.entities.Secret
 import dev.fobo66.secretsloader.entities.Secrets
 import dev.fobo66.secretsloader.entities.SigningConfigSecret

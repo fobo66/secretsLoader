@@ -69,7 +69,7 @@ abstract class LoadSecretsTask : DefaultTask() {
         inputChanges.getFileChanges(secretInputs).forEach { change ->
             if (change.fileType == FileType.DIRECTORY) return@forEach
 
-            logger.debug("${change.changeType}: ${change.normalizedPath}")
+            logger.debug("{}: {}", change.changeType, change.normalizedPath)
             val targetFile = secretOutputs.file(
                 change.normalizedPath.removeSuffix(encryptionSuffix.get())
             ).get().asFile
