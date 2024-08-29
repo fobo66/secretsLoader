@@ -28,7 +28,7 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.5.2")
+    implementation("com.android.tools.build:gradle-api:8.6.0")
     implementation("com.charleskorn.kaml:kaml:0.58.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.12")
