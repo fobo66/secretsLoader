@@ -29,7 +29,7 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.8.0")
+    implementation("com.android.tools.build:gradle-api:8.8.1")
     implementation("com.charleskorn.kaml:kaml:0.70.0")
     testImplementation(kotlin("test-junit5"))
     testImplementation("io.mockk:mockk:1.13.16")
