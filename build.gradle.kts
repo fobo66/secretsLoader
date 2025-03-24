@@ -32,7 +32,7 @@ dependencies {
     implementation("com.android.tools.build:gradle-api:8.9.0")
     implementation("com.charleskorn.kaml:kaml:0.72.0")
     testImplementation(kotlin("test-junit5"))
-    testImplementation("io.mockk:mockk:1.13.16")
+    testImplementation("io.mockk:mockk:1.13.17")
 }
 
 gradlePlugin {
