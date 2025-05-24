@@ -13,7 +13,6 @@ import org.gradle.testfixtures.ProjectBuilder
 import kotlin.test.*
 
 class AddBuildConfigValuesTaskTest {
-
     private lateinit var project: Project
 
     @BeforeTest
@@ -21,10 +20,16 @@ class AddBuildConfigValuesTaskTest {
         project = ProjectBuilder.builder().build()
         project.mkdir(SECRETS_DIR_NAME)
         project.mkdir("build/$SECRETS_DIR_NAME")
-        val secretsFile = project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
-            .file(SECRET_FILE).asFile
+        val secretsFile =
+            project.layout.buildDirectory
+                .dir(SECRETS_DIR_NAME)
+                .get()
+                .file(SECRET_FILE)
+                .asFile
         val testSecretsBytes =
-            this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
+            this.javaClass.classLoader
+                .getResourceAsStream(SECRET_FILE)!!
+                .readAllBytes()
         secretsFile.writeBytes(testSecretsBytes)
         project.pluginManager.withPlugin("com.android.application") {
             project.extensions.getByName<ApplicationExtension>("android").let {
@@ -46,19 +51,26 @@ class AddBuildConfigValuesTaskTest {
     fun addBuildConfigValues() {
         val addBuildConfigValuesTask =
             project.tasks.register<AddBuildConfigValuesTask>("addDebugBuildConfigValues") {
-                buildConfigFile.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(SECRET_FILE))
+                buildConfigFile.set(
+                    project.layout.buildDirectory
+                        .dir(SECRETS_DIR_NAME)
+                        .get()
+                        .file(SECRET_FILE),
+                )
                 flavorName.set("debug")
             }
 
         addBuildConfigValuesTask.get().addBuildConfigValues()
-
 
         project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
             val variantSelector = androidComponents.selector().withName("debug")
             androidComponents.onVariants(variantSelector) {
                 // this assertion doesn't work, but let's pretend that it does
                 assertTrue {
-                    it.buildConfigFields.keySet().get().contains("SECRET_KEY")
+                    it.buildConfigFields
+                        ?.keySet()
+                        ?.get()
+                        ?.contains("SECRET_KEY") == true
                 }
             }
         }
