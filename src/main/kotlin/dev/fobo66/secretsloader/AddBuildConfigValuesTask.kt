@@ -13,26 +13,29 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
-abstract class AddBuildConfigValuesTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
+abstract class AddBuildConfigValuesTask
+    @Inject
+    constructor(
+        objectFactory: ObjectFactory,
+    ) : DefaultTask() {
+        @get:Input
+        abstract val flavorName: Property<String>
 
-    @get:Input
-    abstract val flavorName: Property<String>
+        @get:InputFile
+        abstract val buildConfigFile: RegularFileProperty
 
-    @get:InputFile
-    abstract val buildConfigFile: RegularFileProperty
+        private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
 
-    private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
+        @TaskAction
+        fun addBuildConfigValues() {
+            project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
+                val variantSelector = androidComponents.selector().withName(flavorName.get())
+                androidComponents.onVariants(variantSelector) {
+                    val buildConfigSecrets =
+                        secretsProcessor.loadBuildConfigValues(buildConfigFile.asFile.get().inputStream())
 
-    @TaskAction
-    fun addBuildConfigValues() {
-        project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
-            val variantSelector = androidComponents.selector().withName(flavorName.get())
-            androidComponents.onVariants(variantSelector) {
-                val buildConfigSecrets =
-                    secretsProcessor.loadBuildConfigValues(buildConfigFile.asFile.get().inputStream())
-
-                it.buildConfigFields.putAll(buildConfigSecrets)
+                    it.buildConfigFields?.putAll(buildConfigSecrets)
+                }
             }
         }
     }
-}

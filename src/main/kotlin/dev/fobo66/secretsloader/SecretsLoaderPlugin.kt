@@ -22,19 +22,23 @@ class SecretsLoaderPlugin : Plugin<Project> {
         val secretsParams = target.extensions.create("secretsLoader", SecretsLoaderExtension::class, target.layout)
 
         target.extensions.findByType(AndroidComponentsExtension::class)?.beforeVariants { variant ->
-            val loadSecretsTask = target.tasks.register("load${variant.name}Secrets", LoadSecretsTask::class) {
-                encryptionAlgorithm.set(secretsParams.encryptionAlgorithm)
-                encryptionMessageDigestAlgorithm.set(secretsParams.encryptionMessageDigestAlgorithm)
-                encryptionPassword.set(secretsParams.encryptionPassword)
-                encryptionSuffix.set(secretsParams.encryptionSuffix)
-                secretInputs.set(secretsParams.secretsFolder)
-                secretOutputs.set(target.layout.buildDirectory.dir(SECRETS_DIR_NAME))
-            }
+            val loadSecretsTask =
+                target.tasks.register("load${variant.name}Secrets", LoadSecretsTask::class) {
+                    encryptionAlgorithm.set(secretsParams.encryptionAlgorithm)
+                    encryptionMessageDigestAlgorithm.set(secretsParams.encryptionMessageDigestAlgorithm)
+                    encryptionPassword.set(secretsParams.encryptionPassword)
+                    encryptionSuffix.set(secretsParams.encryptionSuffix)
+                    secretInputs.set(secretsParams.secretsFolder)
+                    secretOutputs.set(target.layout.buildDirectory.dir(SECRETS_DIR_NAME))
+                }
 
             if (secretsParams.useBuildConfig.get()) {
                 target.tasks.register("add${variant.name}BuildConfigValues", AddBuildConfigValuesTask::class) {
                     buildConfigFile.set(
-                        target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}BuildConfig.yml")
+                        target.layout.buildDirectory
+                            .dir(SECRETS_DIR_NAME)
+                            .get()
+                            .file("${variant.name}BuildConfig.yml"),
                     )
                     flavorName.set(variant.name)
                     dependsOn(loadSecretsTask)
@@ -42,21 +46,35 @@ class SecretsLoaderPlugin : Plugin<Project> {
             }
 
             if (secretsParams.useResourceValues.get()) {
-                target.tasks.register("add${
-                    variant.name.replaceFirstChar {
-                        if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() 
-                    }
-                }ResourceValues", AddResourceValuesTask::class) {
+                target.tasks.register(
+                    "add${
+                        variant.name.replaceFirstChar {
+                            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
+                        }
+                    }ResourceValues",
+                    AddResourceValuesTask::class,
+                ) {
                     resConfigFile.set(
-                        target.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file("${variant.name}Resources.yml")
+                        target.layout.buildDirectory
+                            .dir(SECRETS_DIR_NAME)
+                            .get()
+                            .file("${variant.name}Resources.yml"),
                     )
                     flavorName.set(variant.name)
                     dependsOn(loadSecretsTask)
                 }
             }
 
-            target.tasks.findByName("pre${variant.name.replaceFirstChar { if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString() }}Build")
-                ?.dependsOn(loadSecretsTask)
+            target.tasks
+                .findByName(
+                    "pre${variant.name.replaceFirstChar {
+                        if (it.isLowerCase()) {
+                            it.titlecase(Locale.getDefault())
+                        } else {
+                            it.toString()
+                        }
+                    }}Build",
+                )?.dependsOn(loadSecretsTask)
         }
     }
 }

@@ -5,7 +5,7 @@ plugins {
     `kotlin-dsl`
 
     kotlin("jvm") version "2.1.21"
-    kotlin("plugin.serialization") version "2.1.20"
+    kotlin("plugin.serialization") version "2.1.21"
     id("com.gradle.plugin-publish") version "1.3.1"
 }
 
@@ -48,8 +48,9 @@ gradlePlugin {
     }
 }
 
-val functionalTestSourceSet: SourceSet = sourceSets.create("functionalTest") {
-}
+val functionalTestSourceSet: SourceSet =
+    sourceSets.create("functionalTest") {
+    }
 
 tasks.test {
     useJUnitPlatform()
