@@ -4,5 +4,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Secrets(
-    val secrets: Map<String, Secret>
+    val secrets: Map<String, Secret>,
 )

@@ -10,7 +10,9 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.gradle.testfixtures.ProjectBuilder
-import kotlin.test.*
+import kotlin.test.BeforeTest
+import kotlin.test.Test
+import kotlin.test.assertTrue
 
 class AddBuildConfigValuesTaskTest {
     private lateinit var project: Project

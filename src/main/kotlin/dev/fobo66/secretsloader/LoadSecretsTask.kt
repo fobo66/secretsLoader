@@ -6,7 +6,12 @@ import org.gradle.api.DefaultTask
 import org.gradle.api.file.DirectoryProperty
 import org.gradle.api.file.FileType
 import org.gradle.api.provider.Property
-import org.gradle.api.tasks.*
+import org.gradle.api.tasks.Input
+import org.gradle.api.tasks.InputDirectory
+import org.gradle.api.tasks.OutputDirectory
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
+import org.gradle.api.tasks.TaskAction
 import org.gradle.process.ExecOperations
 import org.gradle.work.ChangeType
 import org.gradle.work.FileChange
@@ -16,7 +21,6 @@ import java.io.File
 import javax.inject.Inject
 
 abstract class LoadSecretsTask : DefaultTask() {
-
     @get:Incremental
     @get:PathSensitive(PathSensitivity.NAME_ONLY)
     @get:InputDirectory
@@ -70,9 +74,12 @@ abstract class LoadSecretsTask : DefaultTask() {
             if (change.fileType == FileType.DIRECTORY) return@forEach
 
             logger.debug("{}: {}", change.changeType, change.normalizedPath)
-            val targetFile = secretOutputs.file(
-                change.normalizedPath.removeSuffix(encryptionSuffix.get())
-            ).get().asFile
+            val targetFile =
+                secretOutputs
+                    .file(
+                        change.normalizedPath.removeSuffix(encryptionSuffix.get()),
+                    ).get()
+                    .asFile
 
             if (change.changeType == ChangeType.REMOVED) {
                 logger.debug("Deleting ${targetFile.name}")
@@ -84,7 +91,10 @@ abstract class LoadSecretsTask : DefaultTask() {
         }
     }
 
-    private fun decrypt(targetFile: File, change: FileChange) {
+    private fun decrypt(
+        targetFile: File,
+        change: FileChange,
+    ) {
         execOperations.exec {
             commandLine(
                 encryptionToolExecutable.get(),
@@ -97,7 +107,7 @@ abstract class LoadSecretsTask : DefaultTask() {
                 "-in",
                 change.file.path,
                 "-k",
-                encryptionPassword.get()
+                encryptionPassword.get(),
             )
         }
     }

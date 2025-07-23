@@ -14,28 +14,32 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
 
-abstract class AddResourceValuesTask @Inject constructor(objectFactory: ObjectFactory) : DefaultTask() {
+abstract class AddResourceValuesTask
+    @Inject
+    constructor(
+        objectFactory: ObjectFactory,
+    ) : DefaultTask() {
+        @get:Input
+        abstract val flavorName: Property<String>
 
-    @get:Input
-    abstract val flavorName: Property<String>
+        @get:InputFile
+        abstract val resConfigFile: RegularFileProperty
 
-    @get:InputFile
-    abstract val resConfigFile: RegularFileProperty
+        private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
 
-    private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
+        @TaskAction
+        fun addResourceValues() {
+            project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
+                val variantSelector = androidComponents.selector().withName(flavorName.get())
+                androidComponents.onVariants(variantSelector) { variant ->
+                    val resourceSecrets =
+                        secretsProcessor
+                            .loadResourceValues(resConfigFile.asFile.get().inputStream())
+                            .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
+                            .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
 
-    @TaskAction
-    fun addResourceValues() {
-        project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
-            val variantSelector = androidComponents.selector().withName(flavorName.get())
-            androidComponents.onVariants(variantSelector) { variant ->
-                val resourceSecrets =
-                    secretsProcessor.loadResourceValues(resConfigFile.asFile.get().inputStream())
-                        .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
-                        .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
-
-                variant.resValues.putAll(resourceSecrets)
+                    variant.resValues.putAll(resourceSecrets)
+                }
             }
         }
     }
-}

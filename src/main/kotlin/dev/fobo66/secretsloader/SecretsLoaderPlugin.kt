@@ -8,7 +8,7 @@ import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.util.GradleVersion
-import java.util.*
+import java.util.Locale
 
 @Suppress("unused")
 class SecretsLoaderPlugin : Plugin<Project> {
@@ -67,13 +67,15 @@ class SecretsLoaderPlugin : Plugin<Project> {
 
             target.tasks
                 .findByName(
-                    "pre${variant.name.replaceFirstChar {
-                        if (it.isLowerCase()) {
-                            it.titlecase(Locale.getDefault())
-                        } else {
-                            it.toString()
+                    "pre${
+                        variant.name.replaceFirstChar {
+                            if (it.isLowerCase()) {
+                                it.titlecase(Locale.getDefault())
+                            } else {
+                                it.toString()
+                            }
                         }
-                    }}Build",
+                    }Build",
                 )?.dependsOn(loadSecretsTask)
         }
     }

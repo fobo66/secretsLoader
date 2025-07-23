@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class SigningConfigSecret(
     val keyAlias: String,
     val keyPassword: String,
-    val storePassword: String
+    val storePassword: String,
 )

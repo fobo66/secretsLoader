@@ -15,7 +15,6 @@ import kotlin.test.Test
 import kotlin.test.assertTrue
 
 class AddResourceValuesTaskTest {
-
     private lateinit var project: Project
 
     @BeforeTest
@@ -23,10 +22,16 @@ class AddResourceValuesTaskTest {
         project = ProjectBuilder.builder().build()
         project.mkdir(SECRETS_DIR_NAME)
         project.mkdir("build/$SECRETS_DIR_NAME")
-        val secretsFile = project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get()
-            .file(SECRET_FILE).asFile
+        val secretsFile =
+            project.layout.buildDirectory
+                .dir(SECRETS_DIR_NAME)
+                .get()
+                .file(SECRET_FILE)
+                .asFile
         val testSecretsBytes =
-            this.javaClass.classLoader.getResourceAsStream(SECRET_FILE)!!.readAllBytes()
+            this.javaClass.classLoader
+                .getResourceAsStream(SECRET_FILE)!!
+                .readAllBytes()
         secretsFile.writeBytes(testSecretsBytes)
         project.pluginManager.withPlugin("com.android.application") {
             project.extensions.getByName<ApplicationExtension>("android").let {
@@ -48,21 +53,25 @@ class AddResourceValuesTaskTest {
     fun addResourceValues() {
         val addResourceValuesTask =
             project.tasks.register<AddResourceValuesTask>("addDebugBuildConfigValues") {
-                resConfigFile.set(project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(
-                    SECRET_FILE
-                ))
+                resConfigFile.set(
+                    project.layout.buildDirectory.dir(SECRETS_DIR_NAME).get().file(
+                        SECRET_FILE,
+                    ),
+                )
                 flavorName.set("debug")
             }
 
         addResourceValuesTask.get().addResourceValues()
-
 
         project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
             val variantSelector = androidComponents.selector().withName("debug")
             androidComponents.onVariants(variantSelector) {
                 // this assertion doesn't work, but let's pretend that it does
                 assertTrue {
-                    it.resValues.keySet().get().contains(it.makeResValueKey("string", "SECRET_KEY"))
+                    it.resValues
+                        .keySet()
+                        .get()
+                        .contains(it.makeResValueKey("string", "SECRET_KEY"))
                 }
             }
         }

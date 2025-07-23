@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class Secret(
     val type: String,
     val value: String,
-    val comment: String? = null
+    val comment: String? = null,
 )
