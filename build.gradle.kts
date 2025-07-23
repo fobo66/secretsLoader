@@ -5,9 +5,9 @@ plugins {
     `java-gradle-plugin`
     `kotlin-dsl`
 
-    kotlin("jvm") version "2.2.0"
-    kotlin("plugin.serialization") version "2.2.0"
-    id("com.gradle.plugin-publish") version "1.3.1"
+    alias(libs.plugins.kotlin.jvm)
+    alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.publisher)
 }
 
 group = "dev.fobo66.secretsloader"
@@ -30,10 +30,12 @@ java {
 }
 
 dependencies {
-    implementation("com.android.tools.build:gradle-api:8.11.1")
-    implementation("com.charleskorn.kaml:kaml:0.85.0")
+    implementation(libs.android.gradle.api)
+    implementation(libs.dotenv.kotlin)
+    implementation(libs.kotlinpoet)
+    implementation(libs.kaml)
     testImplementation(kotlin("test-junit5"))
-    testImplementation("io.mockk:mockk:1.14.5")
+    testImplementation(libs.mockk)
 }
 
 gradlePlugin {
