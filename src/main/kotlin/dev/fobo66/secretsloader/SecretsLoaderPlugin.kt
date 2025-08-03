@@ -48,9 +48,7 @@ class SecretsLoaderPlugin : Plugin<Project> {
             if (secretsParams.useResourceValues.get()) {
                 target.tasks.register(
                     "add${
-                        variant.name.replaceFirstChar {
-                            if (it.isLowerCase()) it.titlecase(Locale.getDefault()) else it.toString()
-                        }
+                        processVariantNameForTask(variant.name)
                     }ResourceValues",
                     AddResourceValuesTask::class,
                 ) {
@@ -68,15 +66,18 @@ class SecretsLoaderPlugin : Plugin<Project> {
             target.tasks
                 .findByName(
                     "pre${
-                        variant.name.replaceFirstChar {
-                            if (it.isLowerCase()) {
-                                it.titlecase(Locale.getDefault())
-                            } else {
-                                it.toString()
-                            }
-                        }
+                        processVariantNameForTask(variant.name)
                     }Build",
                 )?.dependsOn(loadSecretsTask)
         }
     }
+
+    private fun processVariantNameForTask(variantName: String): String =
+        variantName.replaceFirstChar {
+            if (it.isLowerCase()) {
+                it.titlecase(Locale.getDefault())
+            } else {
+                it.toString()
+            }
+        }
 }
