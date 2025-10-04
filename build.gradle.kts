@@ -1,4 +1,3 @@
-import io.gitlab.arturbosch.detekt.Detekt
 import org.gradle.kotlin.dsl.registering
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
@@ -9,7 +8,6 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.publisher)
-    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlinter)
 }
 
@@ -72,12 +70,4 @@ val functionalTest by tasks.registering(Test::class) {
 
 val check by tasks.getting(Task::class) {
     dependsOn(functionalTest)
-}
-
-detekt {
-    autoCorrect = true
-}
-
-tasks.withType<Detekt> {
-    jvmTarget = "17"
 }

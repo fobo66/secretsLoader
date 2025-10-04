@@ -1,6 +1,6 @@
 [versions]
 androidGradlePlugin = "8.13.0"
-detekt = "1.23.8"
+detekt = "2.0.0-alpha.0"
 dotenv = "6.5.1"
 gradlePublishPlugin = "2.0.0"
 kaml = "0.97.0"
@@ -17,7 +17,7 @@ kotlinpoet = { group = "com.squareup", name = "kotlinpoet", version.ref = "kotli
 mockk = { group = "io.mockk", name = "mockk", version.ref = "mockk" }
 
 [plugins]
-detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+detekt = { id = "dev.detekt", version.ref = "detekt" }
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kotlinter = { id = "org.jmailen.kotlinter", version.ref = "kotlinter" }
