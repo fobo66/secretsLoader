@@ -7,7 +7,7 @@ kaml = "0.104.0"
 kotlin = "2.3.0"
 kotlinPoet = "2.2.0"
 kotlinter = "5.4.0"
-mockk = "1.14.7"
+mockk = "1.14.9"
 
 [libraries]
 android-gradle-api = { group = "com.android.tools.build", name = "gradle-api", version.ref = "androidGradlePlugin" }
