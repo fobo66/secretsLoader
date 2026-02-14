@@ -1,5 +1,5 @@
 [versions]
-androidGradlePlugin = "9.0.0"
+androidGradlePlugin = "9.0.1"
 detekt = "2.0.0-alpha.2"
 dotenv = "6.5.1"
 gradlePublishPlugin = "2.0.0"
