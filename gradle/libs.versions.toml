@@ -2,7 +2,7 @@
 androidGradlePlugin = "9.1.0"
 detekt = "2.0.0-alpha.2"
 dotenv = "6.5.1"
-gradlePublishPlugin = "2.1.0"
+gradlePublishPlugin = "2.1.1"
 kaml = "0.104.0"
 kotlin = "2.3.20"
 kotlinPoet = "2.2.0"
