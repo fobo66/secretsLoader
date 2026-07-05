@@ -6,7 +6,7 @@ gradlePublishPlugin = "2.1.1"
 kaml = "0.104.0"
 kotlin = "2.4.0"
 kotlinPoet = "2.3.0"
-kotlinter = "5.5.0"
+kotlinter = "5.6.0"
 mockk = "1.14.11"
 
 [libraries]
