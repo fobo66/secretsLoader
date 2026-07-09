@@ -19,7 +19,9 @@ import org.gradle.work.Incremental
 import org.gradle.work.InputChanges
 import java.io.File
 import javax.inject.Inject
+import org.gradle.api.tasks.CacheableTask
 
+@CacheableTask
 abstract class LoadSecretsTask : DefaultTask() {
     @get:Incremental
     @get:PathSensitive(PathSensitivity.NAME_ONLY)

@@ -12,6 +12,8 @@ import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.newInstance
 import javax.inject.Inject
+import org.gradle.api.tasks.PathSensitive
+import org.gradle.api.tasks.PathSensitivity
 
 abstract class AddBuildConfigValuesTask
     @Inject
@@ -22,6 +24,7 @@ abstract class AddBuildConfigValuesTask
         abstract val flavorName: Property<String>
 
         @get:InputFile
+        @get:PathSensitive(PathSensitivity.NAME_ONLY)
         abstract val buildConfigFile: RegularFileProperty
 
         private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
