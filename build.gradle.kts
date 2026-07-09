@@ -1,5 +1,5 @@
-import org.gradle.kotlin.dsl.registering
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
+import org.jetbrains.kotlin.gradle.utils.extendsFrom
 
 plugins {
     `java-gradle-plugin`
@@ -46,9 +46,9 @@ gradlePlugin {
         description =
             "A plugin that helps you with loading sensitive data like API keys from encrypted YAML files into variant-specific res values or build config fields"
         implementationClass = "dev.fobo66.secretsloader.SecretsLoaderPlugin"
-        website.set("https://github.com/fobo66/secretsLoader")
-        vcsUrl.set("https://github.com/fobo66/secretsLoader.git")
-        tags.set(listOf("android", "secrets", "config", "credentials-management"))
+        website = "https://github.com/fobo66/secretsLoader"
+        vcsUrl = "https://github.com/fobo66/secretsLoader.git"
+        tags = listOf("android", "secrets", "config", "credentials-management")
     }
 }
 
@@ -61,13 +61,14 @@ tasks.test {
 }
 
 gradlePlugin.testSourceSets(functionalTestSourceSet)
-configurations.getByName("functionalTestImplementation").extendsFrom(configurations.getByName("testImplementation"))
+configurations.named("functionalTestImplementation").extendsFrom(configurations.named("testImplementation"))
 
-val functionalTest by tasks.registering(Test::class) {
+val functionalTest = tasks.register<Test>("functionalTest") {
+    description = "Test tasks integration"
     testClassesDirs = functionalTestSourceSet.output.classesDirs
     classpath = functionalTestSourceSet.runtimeClasspath
 }
 
-val check by tasks.getting(Task::class) {
+tasks.named("check") {
     dependsOn(functionalTest)
 }
