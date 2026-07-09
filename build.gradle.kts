@@ -8,6 +8,7 @@ plugins {
     alias(libs.plugins.kotlin.jvm)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.publisher)
+    alias(libs.plugins.detekt)
     alias(libs.plugins.kotlinter)
 }
 
