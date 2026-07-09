@@ -3,7 +3,6 @@ package dev.fobo66.secretsloader
 import com.android.build.api.variant.AndroidComponentsExtension
 import com.android.build.api.variant.ResValue
 import dev.fobo66.secretsloader.util.SecretsProcessor
-import javax.inject.Inject
 import org.gradle.api.DefaultTask
 import org.gradle.api.file.RegularFileProperty
 import org.gradle.api.model.ObjectFactory
@@ -15,34 +14,35 @@ import org.gradle.api.tasks.PathSensitivity
 import org.gradle.api.tasks.TaskAction
 import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.newInstance
+import javax.inject.Inject
 
 abstract class AddResourceValuesTask
-@Inject
-constructor(
-    objectFactory: ObjectFactory,
-) : DefaultTask() {
-    @get:Input
-    abstract val flavorName: Property<String>
+    @Inject
+    constructor(
+        objectFactory: ObjectFactory,
+    ) : DefaultTask() {
+        @get:Input
+        abstract val flavorName: Property<String>
 
-    @get:InputFile
-    @get:PathSensitive(PathSensitivity.NAME_ONLY)
-    abstract val resConfigFile: RegularFileProperty
+        @get:InputFile
+        @get:PathSensitive(PathSensitivity.NAME_ONLY)
+        abstract val resConfigFile: RegularFileProperty
 
-    private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
+        private val secretsProcessor = objectFactory.newInstance(SecretsProcessor::class)
 
-    @TaskAction
-    fun addResourceValues() {
-        project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
-            val variantSelector = androidComponents.selector().withName(flavorName.get())
-            androidComponents.onVariants(variantSelector) { variant ->
-                val resourceSecrets =
-                    secretsProcessor
-                        .loadResourceValues(resConfigFile.asFile.get().inputStream())
-                        .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
-                        .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
+        @TaskAction
+        fun addResourceValues() {
+            project.extensions.findByType(AndroidComponentsExtension::class)?.let { androidComponents ->
+                val variantSelector = androidComponents.selector().withName(flavorName.get())
+                androidComponents.onVariants(variantSelector) { variant ->
+                    val resourceSecrets =
+                        secretsProcessor
+                            .loadResourceValues(resConfigFile.asFile.get().inputStream())
+                            .mapKeys { entry -> variant.makeResValueKey(entry.value.type, entry.key) }
+                            .mapValues { entry -> ResValue(entry.value.value, entry.value.comment) }
 
-                variant.resValues.putAll(resourceSecrets)
+                    variant.resValues.putAll(resourceSecrets)
+                }
             }
         }
     }
-}
