@@ -9,6 +9,8 @@ import org.gradle.kotlin.dsl.findByType
 import org.gradle.kotlin.dsl.register
 import org.gradle.util.GradleVersion
 import java.util.Locale
+import org.gradle.api.file.SourceDirectorySet
+import org.gradle.kotlin.dsl.getByName
 
 @Suppress("unused")
 class SecretsLoaderPlugin : Plugin<Project> {
@@ -69,6 +71,10 @@ class SecretsLoaderPlugin : Plugin<Project> {
                         processVariantNameForTask(variant.name)
                     }Build",
                 )?.dependsOn(loadSecretsTask)
+        }
+
+        if (target.pluginManager.hasPlugin("org.jetbrains.kotlin.multiplatform")) {
+            target.extensions.getByName<SourceDirectorySet>("kotlin").srcDir(secretsParams.secretsFolder)
         }
     }
 
