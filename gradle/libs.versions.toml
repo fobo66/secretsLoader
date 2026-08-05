@@ -1,6 +1,6 @@
 [versions]
 androidGradlePlugin = "9.3.1"
-detekt = "2.0.0-alpha.5"
+detekt = "2.0.0-alpha.6"
 dotenv = "6.5.1"
 gradlePublishPlugin = "2.1.1"
 kaml = "0.104.0"
