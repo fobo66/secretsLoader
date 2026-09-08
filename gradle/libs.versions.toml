@@ -5,7 +5,7 @@ dotenv = "6.5.1"
 gradlePublishPlugin = "2.1.1"
 kaml = "0.104.0"
 kotlin = "2.4.20"
-kotlinPoet = "2.3.0"
+kotlinPoet = "2.4.0"
 kotlinter = "5.7.0"
 mockk = "1.14.11"
 
