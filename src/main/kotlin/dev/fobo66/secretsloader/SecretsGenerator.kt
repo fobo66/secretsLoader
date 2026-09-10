@@ -39,24 +39,33 @@ fun generateSecrets(
     dotenv: Dotenv,
     packageName: String = "",
     fileName: String = "Secrets",
-    objectName: String = fileName
+    objectName: String = fileName,
 ) {
-    val secretObject = TypeSpec.objectBuilder(objectName)
-        .apply {
-            dotenv.entries().forEach { entry ->
-                addProperty(
-                    PropertySpec.builder(entry.key, String::class, KModifier.CONST)
-                        .initializer("%S", entry.value)
-                        .build()
-                )
-            }
-        }
-        .build()
-    val secretsFile = FileSpec.builder(packageName, fileName)
-        .indent("    ")
-        .addFileComment("%S", "Automatically generated file. DO NOT MODIFY")
-        .addType(secretObject)
-        .build()
+    val secretObject =
+        TypeSpec
+            .objectBuilder(objectName)
+            .apply {
+                dotenv.entries().forEach { entry ->
+                    addProperty(
+                        PropertySpec
+                            .builder(entry.key, String::class, KModifier.CONST)
+                            .initializer("%S", entry.value)
+                            .build(),
+                    )
+                }
+            }.build()
+    val secretsFile =
+        FileSpec
+            .builder(packageName, fileName)
+            .indent("    ")
+            .addFileComment("%S", "Automatically generated file. DO NOT MODIFY")
+            .addType(secretObject)
+            .build()
 
-    secretsFile.writeTo(project.layout.buildDirectory.dir("generated/source/secret").get().asFile)
+    secretsFile.writeTo(
+        project.layout.buildDirectory
+            .dir("generated/source/secret")
+            .get()
+            .asFile,
+    )
 }

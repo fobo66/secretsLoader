@@ -4,13 +4,13 @@ import com.android.build.api.variant.AndroidComponentsExtension
 import dev.fobo66.secretsloader.util.SECRETS_DIR_NAME
 import org.gradle.api.Plugin
 import org.gradle.api.Project
+import org.gradle.api.file.SourceDirectorySet
 import org.gradle.kotlin.dsl.create
 import org.gradle.kotlin.dsl.findByType
+import org.gradle.kotlin.dsl.getByName
 import org.gradle.kotlin.dsl.register
 import org.gradle.util.GradleVersion
 import java.util.Locale
-import org.gradle.api.file.SourceDirectorySet
-import org.gradle.kotlin.dsl.getByName
 
 @Suppress("unused")
 class SecretsLoaderPlugin : Plugin<Project> {
